@@ -15,7 +15,8 @@ import java.util.List;
 @RequestMapping("/api/pokemons")
 public class PokemonController {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon?limit=80&offset=30";
+    private final String POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=75";
+    private final String POKEAPI_URL_CLOYSTER = "https://pokeapi.co/api/v2/pokemon?limit=2&offset=89";
 
     @GetMapping
     public List<PokemonDTO> getPokemons(){
@@ -34,7 +35,10 @@ public class PokemonController {
                             PokemonDTO pokemonDTO = new PokemonDTO();
                             pokemonDTO.setNumero(pokemonDetalhes.get("id").asText());
                             pokemonDTO.setNome(pokemonDetalhes.get("name").asText());
-                            pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_default").asText());
+                            if(!pokemonDTO.getNome().equals("cloyster"))
+                                pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_default").asText());
+                            else
+                                pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_shiny").asText());
                             List<String> tipos = new ArrayList<>();
                             for (JsonNode tipoInfo : pokemonDetalhes.get("types")) {
                                 tipos.add(tipoInfo.get("type").get("name").asText());
@@ -42,7 +46,7 @@ public class PokemonController {
                             pokemonDTO.setTipos(tipos);
                             pokemons.add(pokemonDTO);
                         }
-                    }catch(HttpClientErrorException e) {
+                    }catch(Exception e) {
                         System.err.println("Não foi possivel encontrar os detalhes nesta URL: "+pokemonUrl+" ; "+e.getMessage());
                     }
                 }
