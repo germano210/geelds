@@ -2,6 +2,7 @@ package br.com.pokemon.pokedex_api.controller;
 
 import br.com.pokemon.pokedex_api.dto.PokemonDTO;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ public class PokemonController {
     private final String POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=75";
     private final String POKEAPI_URL_CLOYSTER = "https://pokeapi.co/api/v2/pokemon?limit=2&offset=89";
 
+    @Cacheable("pokemons")
     @GetMapping
     public List<PokemonDTO> getPokemons(){
         List<PokemonDTO> pokemons = new ArrayList<>();
