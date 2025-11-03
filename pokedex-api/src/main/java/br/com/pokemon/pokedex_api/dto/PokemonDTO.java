@@ -6,6 +6,7 @@ public class PokemonDTO {
     private String numero;
     private String nome;
     private String imageURL;
+    private String imageShinyURL;
     private List<String> tipos;
 
     //getters e setters
@@ -38,4 +39,7 @@ public class PokemonDTO {
         this.tipos=tipos;
     }
 
+    public String getImageShinyURL() { return imageShinyURL; }
+
+    public void setImageShinyURL(String imageShinyURL) { this.imageShinyURL = imageShinyURL; }
 }
