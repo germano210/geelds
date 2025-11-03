@@ -16,14 +16,18 @@ function App() {
     }
     fetchPokemons();
   }, []);
+
+  const listaShiny = ['cloyster','golem'];
   return (
     <div className="App">
       <h1>Extrato de Pokédex</h1>
       <div className="pokedex-container">
-        {pokemon.map((pokemon, index)=>(
+        {pokemon.map((pokemon, index)=>{
+          const imagemURL = listaShiny.includes(pokemon.nome)?pokemon.imageShinyURL:pokemon.imageURL;
+          return (
           <div key={index} className="pokemon-card">
             <h4>#{pokemon.numero}</h4>
-            <img src={pokemon.imageURL} alt={pokemon.nome}/>
+            <img src={imagemURL} alt={pokemon.nome}/>
             <h2>{pokemon.nome}</h2>
             <div className="pokemon-tipos">
               {pokemon.tipos.map((tipo, i)=>(
@@ -33,7 +37,8 @@ function App() {
               ))}
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );

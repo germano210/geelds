@@ -37,10 +37,8 @@ public class PokemonController {
                             PokemonDTO pokemonDTO = new PokemonDTO();
                             pokemonDTO.setNumero(pokemonDetalhes.get("id").asText());
                             pokemonDTO.setNome(pokemonDetalhes.get("name").asText());
-                            if(!pokemonDTO.getNome().equals("cloyster"))
-                                pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_default").asText());
-                            else
-                                pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_shiny").asText());
+                            pokemonDTO.setImageURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_default").asText());
+                            pokemonDTO.setImageShinyURL(pokemonDetalhes.get("sprites").get("versions").get("generation-iii").get("firered-leafgreen").get("front_shiny").asText());
                             List<String> tipos = new ArrayList<>();
                             for (JsonNode tipoInfo : pokemonDetalhes.get("types")) {
                                 tipos.add(tipoInfo.get("type").get("name").asText());
