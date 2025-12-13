@@ -1,114 +1,308 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
-    color: white;
-    height: 100vh;
-    overflow: hidden;
+/* Importação da fonte 'VT323' para garantir a estética Pixel/Retro consistente em todos os clientes */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+/* * Definição de Variáveis Globais (Design Tokens)
+ * Baseado na paleta de cores da interface do mod Cobblemon.
+ * Manter centralizado para facilitar temas futuros (ex: Dark Mode ou outras versões de Pokédex).
+ */
+:root {
+    --cobble-red: #d63d3d;           /* Cor primária da carcaça */
+    --cobble-red-shadow: #a12323;    /* Sombra/Borda da carcaça */
+    --cobble-cyan: #4dcde8;          /* Fundo das telas */
+    --cobble-cyan-light: #89e8f5;    /* Highlights da tela */
+    --cobble-cyan-dark: #3fbacf;     /* Elementos de UI/Bordas internas */
+    --cobble-ui-white: #ffffff;      /* Texto e fundos claros */
+    --bg-external: #222;             /* Fundo da página fora da Pokedex */
 }
 
-.App {
+/* Reset básico e centralização da aplicação na viewport */
+body {
+    margin: 0;
+    background-color: var(--bg-external);
+    font-family: 'VT323', monospace; /* Fallback para monospace se a fonte falhar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+    overflow: hidden; /* Evita scroll na página principal, scroll interno apenas nos componentes */
+}
+
+/* * Container Principal (Moldura da Pokédex)
+ * Simula o dispositivo físico com bordas espessas e sombreamento.
+ */
+.pokedex-frame {
+    width: 95vw;
+    max-width: 1000px;
+    height: 85vh;
+    background-color: var(--cobble-red);
+    border: 8px solid var(--cobble-red-shadow);
+    border-radius: 20px;
+    padding: 15px 30px;
+    /* Box-shadow duplo: externo para profundidade, interno para acabamento */
+    box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    position: relative;
     box-sizing: border-box;
 }
 
-h1 {
-    margin-top: 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    text-align: center;
+/* Elemento decorativo: Dobradiça/Detalhe mecânico lateral esquerdo */
+.pokedex-frame::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 80%;
+    border-left: 4px dashed var(--cobble-red-shadow);
+    opacity: 0.5;
+    pointer-events: none; /* Garante que não interfira em cliques */
 }
 
-.main-layout {
+/* * Barra de Status Superior
+ * Exibe o contexto atual (National Dex) e contadores.
+ */
+.header-bar {
     display: flex;
-    gap: 20px;
-    height: 100%;
-    overflow: hidden;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--cobble-cyan-dark), var(--cobble-cyan));
+    padding: 5px 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 3px solid var(--cobble-cyan-light);
+    color: var(--cobble-ui-white);
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.2); /* Legibilidade sobre fundo ciano */
 }
 
-
-.glass-panel {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+.header-stats {
+    font-size: 1.2rem;
 }
 
-.left-pane {
+/* * Área de Conteúdo Principal (Split View)
+ * Container flexível que divide a lista (esquerda) e detalhes (direita).
+ */
+.main-screen {
+    display: flex;
     flex: 1;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.3) transparent;
+    background-color: var(--cobble-cyan);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+
+    /* Padrão de Scanlines (Grid Lines) */
+    /* Cria o efeito de tela LCD antiga usando gradientes transparentes */
+    background-image:
+            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 100% 40px, 100% 100%;
 }
 
+/* --- Painel Esquerdo: Lista de Pokémons --- */
+.left-pane {
+    flex: 3; /* Ocupa 60% do espaço disponível */
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 4px solid var(--cobble-cyan-dark); /* Divisor visual */
+}
+
+/* Scrollbar customizada para manter a imersão visual (WebKit only) */
+.left-pane::-webkit-scrollbar {
+    width: 12px;
+}
+.left-pane::-webkit-scrollbar-track {
+    background: var(--cobble-cyan-dark);
+}
+.left-pane::-webkit-scrollbar-thumb {
+    background: var(--cobble-ui-white);
+    border-radius: 6px;
+    border: 2px solid var(--cobble-cyan-dark);
+}
+
+/* Grid responsivo para os slots de Pokémon */
 .pokedex-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    /* Auto-fill preenche o espaço com colunas de no mínimo 80px */
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+/* Card individual do Grid */
+.pokemon-slot {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    aspect-ratio: 1; /* Mantém o slot perfeitamente quadrado */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.pokemon-slot:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Estado ativo/selecionado */
+.pokemon-slot.selected {
+    background-color: var(--cobble-ui-white);
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.slot-number {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-size: 0.9rem;
+    color: var(--cobble-ui-white);
+    text-shadow: 1px 1px 0 #000; /* Outline forçado para contraste */
+}
+
+.slot-img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    image-rendering: pixelated; /* Crucial para sprites não ficarem borrados */
+}
+
+/* --- Painel Direito: Detalhes --- */
+.right-pane {
+    flex: 2; /* Ocupa 40% do espaço */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
     gap: 15px;
 }
 
-.right-pane {
-    flex: 1;
+/* Input de Busca estilizado */
+.search-container {
+    background-color: var(--cobble-ui-white);
+    border-radius: 5px;
+    padding: 5px 10px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    border: 2px solid var(--cobble-cyan-dark);
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    font-family: 'VT323', monospace;
+    font-size: 1.5rem;
+    width: 100%;
+    color: #333;
+    background: transparent;
+}
+
+/* Área de Visualização 3D (Simulada) */
+.display-area {
+    flex: 2;
+    /* Gradiente radial para simular foco/luz */
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+    display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    position: relative;
 }
 
-.pokemon-item {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: 1px solid transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Plataforma/Sombra abaixo do Pokémon */
+.display-platform {
+    width: 150px;
+    height: 40px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20px;
 }
 
-.pokemon-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.3);
+.display-img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    z-index: 2;
+    image-rendering: pixelated;
+    /* Animação leve de flutuação para dar vida ao sprite */
+    animation: bounce 3s infinite ease-in-out;
 }
 
-.pokemon-item img {
-    width: 80px;
-    height: 80px;
-}
-
-.detail-image {
-    width: 200px;
-    height: 200px;
-    filter: drop-shadow(0 0 15px rgba(255,255,255,0.6));
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
 }
 
-.pokemon-tipos {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 10px;
+/* Card de Informações textuais */
+.info-box {
+    flex: 1;
+    background-color: var(--cobble-ui-white);
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid var(--cobble-cyan-dark);
+    color: #333;
 }
 
-.pokemon-type-badge {
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.9em;
+.info-title {
+    margin: 0;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+}
+
+/* * Badges de Tipos
+ * Mapeamento completo de cores para todos os tipos oficiais.
+ */
+.type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    margin-right: 5px;
+    border-radius: 4px;
+    color: white;
+    font-size: 1rem;
     text-transform: uppercase;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+
+/* Palette oficial (aproximada) da Gen 3/4 */
+.type-normal   { background-color: #A8A878; }
+.type-fire     { background-color: #F08030; }
+.type-water    { background-color: #6890F0; }
+.type-grass    { background-color: #78C850; }
+.type-electric { background-color: #F8D030; }
+.type-ice      { background-color: #98D8D8; }
+.type-fighting { background-color: #C03028; }
+.type-poison   { background-color: #A040A0; }
+.type-ground   { background-color: #E0C068; }
+.type-flying   { background-color: #A890F0; }
+.type-psychic  { background-color: #F85888; }
+.type-bug      { background-color: #A8B820; }
+.type-rock     { background-color: #B8A038; }
+.type-ghost    { background-color: #705898; }
+.type-dragon   { background-color: #7038F8; }
+.type-steel    { background-color: #B8B8D0; }
+.type-dark     { background-color: #705848; }
+.type-fairy    { background-color: #EE99AC; } /* Adicionado para compatibilidade futura */
+
+/* Rodapé Decorativo (Tabs) */
+.footer-tabs {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    border-top: 2px solid rgba(255,255,255,0.3);
+}
+
+.tab-icon {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tab-icon:hover {
+    background-color: var(--cobble-ui-white);
 }
