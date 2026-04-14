@@ -314,4 +314,36 @@ public class PokemonBuild {
     public void setMoves(List<BuildMove> moves) {
         this.moves = moves;
     }
+
+    public String getGuideText() {
+        return guideText;
+    }
+
+    public void setGuideText(String guideText) {
+        this.guideText = guideText;
+    }
+
+    public Integer getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(Integer generation) {
+        this.generation = generation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
 }
