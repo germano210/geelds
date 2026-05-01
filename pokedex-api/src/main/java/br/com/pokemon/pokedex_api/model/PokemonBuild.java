@@ -1,6 +1,8 @@
 package br.com.pokemon.pokedex_api.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +75,18 @@ public class PokemonBuild {
     @Column(name = "iv_spe", columnDefinition = "integer default 31")
     private Integer ivSpe = 31;
 
+    @Column(name = "guide_text", columnDefinition = "TEXT")
+    private String guideText;
+
+    private Integer generation = 9;
+
+    private String status = "PENDING";
+
+    @Column(name = "vote_count")
+    private Integer voteCount = 0;
+
     @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "build", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -300,5 +313,37 @@ public class PokemonBuild {
 
     public void setMoves(List<BuildMove> moves) {
         this.moves = moves;
+    }
+
+    public String getGuideText() {
+        return guideText;
+    }
+
+    public void setGuideText(String guideText) {
+        this.guideText = guideText;
+    }
+
+    public Integer getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(Integer generation) {
+        this.generation = generation;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 }

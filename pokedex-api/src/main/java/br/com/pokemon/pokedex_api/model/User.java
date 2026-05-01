@@ -34,6 +34,28 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
+    @Column(name = "dark_mode")
+    private Boolean darkMode = false;
+
+    @Column(name = "real_mode")
+    private Boolean realMode = false;
+
+    public Boolean getDarkMode() {
+        return darkMode;
+    }
+
+    public void setDarkMode(Boolean darkMode) {
+        this.darkMode = darkMode;
+    }
+
+    public Boolean getRealMode() {
+        return realMode;
+    }
+
+    public void setRealMode(Boolean realMode) {
+        this.realMode = realMode;
+    }
+
     public Long getId() {
         return id;
     }
