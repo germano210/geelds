@@ -18,7 +18,6 @@ import java.util.Map;
 @RequestMapping("/api/pokemons")
 public class PokemonController {
     private final RestTemplate restTemplate = new RestTemplate();
-    // Offset configurado conforme sua preferência anterior
     private final String POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon?limit=25&offset=75";
 
     @Cacheable("pokemons")
@@ -51,7 +50,7 @@ public class PokemonController {
                             }
                             pokemonDTO.setTipos(tipos);
 
-                            // --- NOVA LÓGICA: Extração de Status Base ---
+                            // Extração de Status Base
                             Map<String, Integer> statusMap = new HashMap<>();
                             if (pokemonDetalhes.has("stats")) {
                                 for (JsonNode statNode : pokemonDetalhes.get("stats")) {
@@ -61,8 +60,6 @@ public class PokemonController {
                                 }
                             }
                             pokemonDTO.setStatus(statusMap);
-                            // ---------------------------------------------
-
                             pokemons.add(pokemonDTO);
                         }
                     }catch(Exception e) {
@@ -73,7 +70,6 @@ public class PokemonController {
         }catch(HttpClientErrorException e){
             System.err.println("Erro de conexão com a PokéAPI:\n"+e.getMessage());
         }
-
         return pokemons;
     }
 }
