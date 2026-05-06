@@ -24,9 +24,9 @@ Este projeto foi desenvolvido com o intuito de aplicar conceitos sólidos de eng
 * **Interface Clássica:** Design inspirado na Pokédex original.
 
 ### Em Desenvolvimento (Próximos Passos)
-* [ ] **Gestor de Builds Competitivas:** Capacidade de importar *builds* no formato texto do *Pokémon Showdown* (Smogon).
+* [x] **Gestor de Builds Competitivas:** Capacidade de importar *builds* no formato texto do *Pokémon Showdown* (Smogon).
 * [ ] **Persistência de Dados:** Integração com base de dados relacional (PostgreSQL) para guardar as *builds* personalizadas de forma rápida, reduzindo a dependência de chamadas externas.
-* [ ] **Sistema de Autenticação:** Criação de perfis de utilizador para que cada pessoa possa guardar e gerir as suas próprias estratégias.
+* [x] **Sistema de Autenticação:** Criação de perfis de utilizador para que cada pessoa possa guardar e gerir as suas próprias estratégias.
 
 ##  Como Executar o Projeto Localmente
 
