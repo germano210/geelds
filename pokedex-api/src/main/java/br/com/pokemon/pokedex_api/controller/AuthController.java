@@ -29,7 +29,7 @@ public class AuthController {
 
     // LOGIN
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO data) {
+    public ResponseEntity<?> login(@RequestBody AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.getEmail(), data.getPassword());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -47,9 +47,9 @@ public class AuthController {
                 .body("Login realizado com sucesso!");
     }
 
-    // ROTA 2: REGISTRO DE USUÁRIO
+    // REGISTRO
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterDTO data) {
+    public ResponseEntity<?> register(@RequestBody RegisterDTO data) {
         // Verifica se o e-mail já existe
         if (this.repository.findByEmail(data.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Erro: Este e-mail já está em uso.");
@@ -81,5 +81,24 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(org.springframework.http.HttpHeaders.SET_COOKIE, cookie.toString())
                 .body("Usuário criado e logado com sucesso!");
+    }
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        // Pega o usuário que foi validado
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        // Verifica se realmente tem alguém logado
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        User user = (User) authentication.getPrincipal();
+
+        // Devolve apenas as informações pro react
+        return ResponseEntity.ok(java.util.Map.of(
+                "username", user.getUsername(),
+                "email", user.getEmail(),
+                "darkMode", user.getDarkMode(),
+                "realMode", user.getRealMode()
+        ));
     }
 }
