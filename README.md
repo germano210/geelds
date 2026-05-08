@@ -27,6 +27,8 @@ Este projeto foi desenvolvido com o intuito de aplicar conceitos sólidos de eng
 * [x] **Gestor de Builds Competitivas:** Capacidade de importar *builds* no formato texto do *Pokémon Showdown* (Smogon).
 * [ ] **Persistência de Dados:** Integração com base de dados relacional (PostgreSQL) para guardar as *builds* personalizadas de forma rápida, reduzindo a dependência de chamadas externas.
 * [x] **Sistema de Autenticação:** Criação de perfis de utilizador para que cada pessoa possa guardar e gerir as suas próprias estratégias.
+* [ ] **Sistema de Login:** Arrumar como login será feito e como é gerenciado as autenticaçoes.
+* [ ] **Fazer tudo dinamico:** Deixar a usabilidade pratia.
 
 ##  Como Executar o Projeto Localmente
 
