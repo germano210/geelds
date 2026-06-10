@@ -1,5 +1,7 @@
 #  Pokédex & Competitive Build Manager
 
+atualmente parado por motivos de foco em outras areas, ira retornar!
+
 Um projeto *fullstack* que combina uma Pokédex interativa com um gestor de *builds* competitivas de Pokémon (baseado no formato Smogon). 
 
 Este projeto foi desenvolvido com o intuito de criar um similar util ao smogon, integrando uma API RESTful robusta com uma interface de utilizador dinâmica e responsiva.
